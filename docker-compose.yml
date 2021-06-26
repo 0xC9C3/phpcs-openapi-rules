@@ -1,0 +1,9 @@
+version: '3'
+services:
+    php:
+        build:
+            dockerfile: debug.Dockerfile
+            context: .
+        restart: always
+        volumes:
+            - .:/var/www/html
