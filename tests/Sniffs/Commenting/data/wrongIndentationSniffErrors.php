@@ -160,4 +160,41 @@ class Errors
 	{
 		return false;
 	}
+
+	/**
+	 * @OA\Post(
+	 *     summary="save",
+	 *     path="/backend/api/v1/products/privacy-confirmations/save/",
+	 *     deprecated=false,
+	 *     tags={"PrivacyConfirmations"},
+	 *     operationId="savePrivacyConfirmations",
+	 *     security={{"BackendJWT":{}}},
+	 * @OA\RequestBody(
+	 *         required=true,
+	 * @OA\MediaType(
+	 *             mediaType="application/json",
+	 * @OA\Schema(ref="#/components/schemas/PrivacyConfirmation")
+	 *         )
+	 *     ),
+	 * @OA\Response(
+	 *          response="200",#3#3#3#3#
+	 *          description="successfull response",
+	 * @OA\MediaType(
+	 *              mediaType="application/json",
+	 * @OA\Schema(
+	 *                  type="object",
+	 * @OA\Property(
+	 *                     property="uniqueId",
+	 *                     type="string"
+	 *                   ),
+	 *              )
+	 *          ),
+	 *     )
+	 * )
+	 * @return bool
+	 */
+	public function brokenOperation(): bool
+	{
+		return false;
+	}
 }

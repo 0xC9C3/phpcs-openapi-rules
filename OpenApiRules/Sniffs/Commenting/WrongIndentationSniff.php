@@ -56,11 +56,33 @@ class WrongIndentationSniff implements Sniff
 				);
 				$sourceAnnotationText = str_replace($indentation, '', $sourceAnnotationText);
 
-				$result = $this->formatAnnotation($annotation->export(), $phpcsFile->eolChar);
+				$exportedAnnotationText = $annotation->export();
+				$analyser = new Analyser();
+				try {
+					$analysedAnnotation = $analyser->fromComment($exportedAnnotationText)[0];
+					if (!$analysedAnnotation->validate()){
+						$phpcsFile->addError(
+							'Unable to validate OpenAPI doc',
+							$annotation->getStartPointer(),
+							self::INVALID_FORMAT
+						);
+						continue;
+					}
+				}
+				catch (\Exception $e) {
+					$phpcsFile->addError(
+						'Unable to validate OpenAPI doc',
+						$annotation->getStartPointer(),
+						self::INVALID_FORMAT
+					);
+					continue;
+				}
+
+				$result = $this->formatAnnotation($exportedAnnotationText, $phpcsFile->eolChar);
 
 				if ($result === null) {
 					$phpcsFile->addError(
-						'Unable to validate OpenAPI doc',
+						'Unable to validate OpenAPI doc after formatting',
 						$annotation->getStartPointer(),
 						self::INVALID_FORMAT
 					);
@@ -117,16 +139,10 @@ class WrongIndentationSniff implements Sniff
 	 *
 	 * @param string $content
 	 * @param string $eolChar
-	 * @return string|null
+	 * @return string
 	 */
-	protected function formatAnnotation(string $content, string $eolChar): ?string
+	protected function formatAnnotation(string $content, string $eolChar): string
 	{
-		$analyser = new Analyser();
-		$annotation = $analyser->fromComment($content)[0];
-		if (!$annotation->validate()){
-			return null;
-		}
-
 		$content = str_replace($eolChar, '', $content);
 
 		$bracketsOpen = 0;

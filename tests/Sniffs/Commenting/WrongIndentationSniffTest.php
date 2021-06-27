@@ -19,12 +19,13 @@ class WrongIndentationSniffTest extends TestCase
 
 
 
-		self::assertSame(4, $report->getErrorCount());
+		self::assertSame(5, $report->getErrorCount());
 
 		self::assertSniffError($report, 7, WrongIndentationSniff::INVALID_INDENTATION);
 		self::assertSniffError($report, 23, WrongIndentationSniff::INVALID_INDENTATION);
 		self::assertSniffError($report, 89, WrongIndentationSniff::INVALID_INDENTATION);
 		self::assertSniffError($report, 128, WrongIndentationSniff::INVALID_INDENTATION);
+		self::assertSniffError($report, 165, WrongIndentationSniff::INVALID_FORMAT);
 
 		self::assertAllFixedInFile($report);
 	}
