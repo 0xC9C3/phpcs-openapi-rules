@@ -71,7 +71,7 @@ class WrongIndentationSniff implements Sniff
 				}
 				catch (\Exception $e) {
 					$phpcsFile->addError(
-						'Unable to validate OpenAPI doc',
+						'Unable to validate OpenAPI doc ' . $e->getMessage(),
 						$annotation->getStartPointer(),
 						self::INVALID_FORMAT
 					);
@@ -79,15 +79,6 @@ class WrongIndentationSniff implements Sniff
 				}
 
 				$result = $this->formatAnnotation($exportedAnnotationText, $phpcsFile->eolChar);
-
-				if ($result === null) {
-					$phpcsFile->addError(
-						'Unable to validate OpenAPI doc after formatting',
-						$annotation->getStartPointer(),
-						self::INVALID_FORMAT
-					);
-					continue;
-				}
 
 				if ($result === $sourceAnnotationText) {
 					continue;
